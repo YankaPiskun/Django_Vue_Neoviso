@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Order, Car
+from .models import Order, Car, Service, Employee
 
 
 # class OrderSerializer(serializers.Serializer):
@@ -41,6 +41,26 @@ class OrderSerializer(serializers.ModelSerializer):
 class OrderCrateSerializer(serializers.ModelSerializer):
       class Meta:
             model = Order
+            fields = "__all__"
+
+
+class CarSerializer(serializers.ModelSerializer):
+      brand = serializers.CharField()
+      class Meta:
+            model = Car
+            fields = "__all__"
+
+
+class EmployeeSerializer(serializers.ModelSerializer):
+      class Meta:
+            model = Employee
+            fields = "__all__"
+
+
+class ServiceSerializer(serializers.ModelSerializer):
+
+      class Meta:
+            model = Service
             fields = "__all__"
 
 

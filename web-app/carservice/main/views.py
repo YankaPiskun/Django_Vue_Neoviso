@@ -1,16 +1,13 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
-from .models import Order
+from .models import Order, Car, Service, Employee
 from .forms import OrderForm
 from django.views.generic import DetailView, UpdateView, DeleteView
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from .serializers import OrderSerializer, OrderCrateSerializer
-from rest_framework import status
-from django.http import Http404
+from .serializers import OrderSerializer, OrderCrateSerializer, CarSerializer, EmployeeSerializer, ServiceSerializer
 from django.http import HttpResponse, JsonResponse
 from rest_framework.parsers import JSONParser
-from rest_framework import generics
+from rest_framework import viewsets, permissions
+
 
 
 
@@ -77,135 +74,28 @@ class OrderDeleteView(DeleteView):
     template_name = 'main/order-delete.html'
 
 
-# class OrderApiView(APIView):
-#     def get(self, request):
-#         orders = Order.objects.all()
-#         serializer = OrderSerializer(orders, many=True)
-#         return Response(serializer.data)
-#
-#     def post(self, request):
-#         serializer = OrderSerializer(data=request.data)
-#         if serializer.is_valid(raise_exception=True):
-#             serializer.save()
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
 
 
-# class OrderApiDetail(APIView):
-#     def get_object(self, pk):
-#         try:
-#             return Order.objects.get(pk=pk)
-#         except Order.DoesNotExist:
-#             raise Http404
-#
-#     def get(self, request, pk):
-#         orders = self.get_object(pk)
-#         serializer = OrderSerializer(orders)
-#         return Response(serializer.data)
-#
-#     def put(self, request, pk):
-#         orders = self.get_object(pk)
-#         serializer = OrderSerializer(orders, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#     def delete(self, request, pk):
-#         orders = self.get_object(pk)
-#         orders.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
+class OrderCreateViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderCrateSerializer
 
 
-@csrf_exempt
-def snippet_list(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
-    if request.method == 'GET':
-        snippets = Order.objects.all()
-        serializer = OrderSerializer(snippets, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = OrderSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+class ServiceViewSet(viewsets.ModelViewSet):
+    queryset = Service.objects.all()
+    serializer_class = ServiceSerializer
 
 
-@csrf_exempt
-def OrderApiDetail(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
-    try:
-        snippet = Order.objects.get(pk=pk)
-    except Order.DoesNotExist:
-        return HttpResponse(status=404)
-
-    if request.method == 'GET':
-        serializer = OrderSerializer(snippet)
-        return JsonResponse(serializer.data)
-
-    elif request.method == 'PUT':
-        data = JSONParser().parse(request)
-        serializer = OrderSerializer(snippet, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400)
-
-    elif request.method == 'DELETE':
-        snippet.delete()
-        return HttpResponse(status=204)
+class EmployeeViewSet(viewsets.ModelViewSet):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
 
 
-@csrf_exempt
-def snippet_list_crate(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
-    if request.method == 'GET':
-        snippets = Order.objects.all()
-        serializer = OrderCrateSerializer(snippets, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = OrderCrateSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
 
 
-@csrf_exempt
-def OrderApiDetail_crate(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
-    try:
-        snippet = Order.objects.get(pk=pk)
-    except Order.DoesNotExist:
-        return HttpResponse(status=404)
-
-    if request.method == 'GET':
-        serializer = OrderCrateSerializer(snippet)
-        return JsonResponse(serializer.data)
-
-    elif request.method == 'PUT':
-        data = JSONParser().parse(request)
-        serializer = OrderCrateSerializer(snippet, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400)
-
-    elif request.method == 'DELETE':
-        snippet.delete()
-        return HttpResponse(status=204)
 
 

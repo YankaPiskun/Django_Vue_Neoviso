@@ -1,19 +1,18 @@
 <template>
-    <div class="create">
-        <post-form @upd='upd'></post-form>
-    </div>
+  <div class="OrderCrate">
+    <post-form />
+  </div>
 </template>
 
 <script>
-import PostForm from '@/components/PostForm.vue';
-    export default {
-        components: { PostForm },
-        
-    }
+import PostForm from "@/components/PostForm.vue";
+export default {
+  components: { PostForm },
+};
 </script>
 
 <style scoped>
-    .create{
-        display: flex;
-    }
+.OrderCreate {
+  display: flex;
+}
 </style>

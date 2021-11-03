@@ -1,33 +1,26 @@
 <template>
-<div>
-    <nav-bar></nav-bar>
-  <div class="app">
+  <div>
+    <nav-bar />
+    <div>
       <div class="main">
-      <router-view></router-view>
+        <router-view />
       </div>
-  </div>
-  <foot-bar></foot-bar>
+    </div>
+    <foot-bar />
   </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
 <style>
-   *{
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-    .app{
-        
-        
-    }
-    .main{
-        min-height: 610px;
-    }
-    
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.main {
+  min-height: 610px;
+}
 </style>

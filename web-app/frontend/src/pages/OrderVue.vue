@@ -1,63 +1,38 @@
 <template>
   <div>
-
-      <post-order :orders='orders' @upd='upd' v-if="!isOrderLoading"></post-order>
-      <div v-else class="loader">
-          Идёт загрузка c сервера...
-      </div>
-
+    <post-order :orders="orders" @remove="removeOrder" />
   </div>
 </template>
 
 <script>
-import PostOrder from '@/components/PostOrder.vue';
-import axios from 'axios'
-
+import PostOrder from "@/components/PostOrder.vue";
+import axios from "axios";
 
 export default {
-  components: { PostOrder},
-    
-    data(){
-        return {
-            orders: [],
-            isOrderLoading:false,
-        }
+  components: { PostOrder },
 
-    }, 
-    methods: {
-        createOrder(order){
-          this.orders.push(order)
-          
-        },
-    
-        async upd(){
-            try{
-            this.isOrderLoading = true;
-            setTimeout( async ()=>{
-                const response = await axios.get('http://127.0.0.1:8000/orders/');
-                this.orders = response.data;
-                this.isOrderLoading = false
-            }, 1000 )
-            } catch (e){
-                alert('Ошибка')
-            }
-        },
-
-        
-            
+  data() {
+    return {
+      orders: [],
+    };
+  },
+  methods: {
+    GetOrders() {
+      axios
+        .get("http://127.0.0.1:8000/orders/")
+        .then((response) => (this.orders = response.data))
+        .catch((error) => console.log(error));
     },
-
-    mounted() {
-        this.upd()
+    removeOrder(order) {
+        axios.delete("http://127.0.0.1:8000/orders/" + order.id);
+        this.orders = this.orders.filter(o => o.id !== order.id);
     },
-    
-}
+  },
+  mounted() {
+    this.GetOrders();
+  },
+};
 </script>
 
 <style>
- .loader{
-     font-size: 25px;
-     text-align: center;
- }
- 
 </style>

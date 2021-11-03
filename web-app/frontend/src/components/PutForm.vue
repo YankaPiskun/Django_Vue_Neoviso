@@ -1,77 +1,96 @@
 <template>
-  <div>
-      <div>
-          <form @submit.prevent class="form">
-              <h1>Редактирование</h1>
-              <ui-input v-model="order.clients_name" type="text" placeholder="Введите имя"></ui-input>
-              <ui-input v-model="order.clients_surname" type="text" placeholder="Введите фамилию"></ui-input>
-              <ui-select v-model.number="order.car" class="input">
-                <option disabled value="">Выбирете марку авто</option>
-                <option value=1>Audi</option>
-                <option value=2>BMW</option>
-                <option value=3>Ferrari</option>
-                <option value=4>Ford</option>
-                <option value=5>Kia</option>
-                <option value=6>Volvo</option>
-                <option value=7>Tesla</option>
-              </ui-select>
-              <ui-select v-model.number="order.employee" class="input">
-                <option disabled value="">Выберете сотрудника</option>
-                <option value=1>Гаврилов</option>
-                <option value=2>Пискун</option>
-                <option value=3>Белый</option>
-                <option value=4>Скурчаев</option>
-                <option value=5>Демиденко</option>
-              </ui-select>
-              <ui-select v-model.number="order.service" class="input">
-                <option disabled value="">Выберете услугу</option>
-                <option value=1>Покраска</option>
-                <option value=4>Технический осмотр</option>
-                <option value=3>Починка запчастей</option>
-                <option value=2>Замена запчастей</option>
-                <option value=5>Замена зеркал и стёкол</option>
-              </ui-select>
-            <ui-button class="btn" @click="createOrder">Редактировать</ui-button>
-            <ui-button class="btn" @click="$router.push('/OrderVue')">Перейти к заказам</ui-button>
-          </form>
-      </div>
+  <div class="block_form">
+    <form @submit.prevent class="form">
+      <h1>Редактирование заказа</h1>
+      <ui-input
+        v-model="order.clients_name"
+        type="text"
+        placeholder="Введите имя"
+      ></ui-input>
+      <ui-input
+        v-model="order.clients_surname"
+        type="text"
+        placeholder="Введите фамилию"
+      ></ui-input>
+      <ui-select
+        v-model="order.car"
+        :options="selectCar" 
+        class="input" 
+      />
+      <ui-select
+        v-model="order.employee"
+        :options="selectEmployee"
+        class="input"
+      />
+      <ui-select
+        v-model="order.service"
+        :options="selectService"
+        class="input"
+      />
+      <ui-button class="btn" @click="createOrder">Создать</ui-button>
+      <ui-button class="btn" @click="$router.push('/OrderVue')"
+        >Перейти к заказам</ui-button
+      >
+    </form>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 
 export default {
-  
-    data(){
-        return{
-            order: {
-                clients_name:'',
-                clients_surname: '',
-                car:'',
-                employee:'',
-                service:'',
-            }
-        }
-    },
+  data() {
+    return {
+      order: {
+        clients_name: "",
+        clients_surname: "",
+        car: "",
+        employee: "",
+        service: "",
+      },
+      selectCar: [
+        { value: 1, name: "Audi" },
+        { value: 2, name: "BMW" },
+        { value: 3, name: "Ferrari" },
+        { value: 4, name: "Ford" },
+        { value: 5, name: "Kia" },
+        { value: 6, name: "Volvo" },
+        { value: 7, name: "Tesla" },
+      ],
+      selectEmployee: [
+        { value: 1, name: "Гаврилов" },
+        { value: 2, name: "Пискун" },
+        { value: 3, name: "Белый" },
+        { value: 4, name: "Скурчаев" },
+        { value: 5, name: "Демиденко" },
+      ],
+      selectService: [
+        { value: 1, name: "Покраска" },
+        { value: 2, name: "Замена запчастей" },
+        { value: 3, name: "Починка запчастей" },
+        { value: 4, name: "Технический осмотр" },
+        { value: 5, name: "Замена зеркал и стёкол" },
+      ],
+    };
+  },
     methods: {
       createOrder(){
-            axios.put('http://127.0.0.1:8000/orders/create/' + this.$route.params.id, {
+            axios.put('http://127.0.0.1:8000/create/' + this.$route.params.id + '/', {
                 clients_name: this.order.clients_name,
                 clients_surname: this.order.clients_surname,
                 car: this.order.car,
                 employee: this.order.employee,
                 service: this.order.service
             })
-            .then(response => {})
-            .catch(error => console.log(error))
-            this.order = {
+            .then(response => {
+                this.order = {
                 clients_name:'',
                 clients_surname: '',
                 car:'',
                 employee:'',
                 service:'',
-            }
+            }})
+            .catch(error => console.log(error))
       }
     },
 
